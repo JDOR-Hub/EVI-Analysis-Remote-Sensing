@@ -39,19 +39,19 @@ df = pd.DataFrame({
     'Blue': blue_data.flatten(),
     'Red': red_data.flatten(),
     'NIR': nir_data.flatten(),
-    'Water': evi_labels_data.flatten()
+    'Veg': evi_labels_data.flatten()
 })
 
 #print("DataFrame:\n", df)
 
-df['Water'] = np.where(df['Water'] > 0, True, False)
+df['Veg'] = np.where(df['Veg'] > 0, True, False)
 #print(df.head())
 
 '''descriptive = df.describe(percentiles=[0.01,.03,.05,.07,.08,.1,.2,.3,.4,.5,.6,.7,.8,.9,.95,.98,.99])
 print("Descriptive Statistics:\n", descriptive)'''
 
 # Correlation matrix
-'''correlation_matrix = df[['EVI', 'Blue', 'Red', 'NIR', 'Water']].corr()
+'''correlation_matrix = df[['EVI', 'Blue', 'Red', 'NIR', 'Veg']].corr()
 print("Correlation Matrix:\n", correlation_matrix)'''
 
 
@@ -92,12 +92,12 @@ plt.show()'''
 
 '''n_sample =  300
 sample =  pd.concat([
-    df[df['Water'] == class_value].sample(n=n_sample, random_state=42, replace=False)
-    for class_value in df['Water'].unique()
+    df[df['Veg'] == class_value].sample(n=n_sample, random_state=42, replace=False)
+    for class_value in df['Veg'].unique()
 ])
 
-pair_plot = sns.pairplot(data=sample, hue="Water")
-pair_plot.fig.suptitle("Feature Relationships Stratified by Water Class (n=300 per class)")
+pair_plot = sns.pairplot(data=sample, hue="Veg")
+pair_plot.fig.suptitle("Feature Relationships Stratified by Veg Class (n=300 per class)")
 plt.show()'''
 
 # Machine learning setup
@@ -106,19 +106,19 @@ sample_size_per_class = 10000  # Can be adjusted (e.g., 300000 for larger datase
 
 # Create balanced dataset by sampling equal numbers from each class
 df_sampled = pd.concat([
-    df[df['Water'] == class_value].sample(n=sample_size_per_class, 
+    df[df['Veg'] == class_value].sample(n=sample_size_per_class, 
                                            random_state=42, 
                                            replace=False)
-    for class_value in df['Water'].unique()
+    for class_value in df['Veg'].unique()
 ])
 
 # Verify class distribution in sampled data
 print("Class distribution in sampled dataset:")
-print(df_sampled['Water'].value_counts())
+print(df_sampled['Veg'].value_counts())
 
 # Prepare features (X) and target (y)
-X = df_sampled.drop(['Water', 'Blue', 'EVI'], axis=1)  # Independent variables (features)
-y = df_sampled['Water']                        # Dependent variable (target)
+X = df_sampled.drop(['Veg', 'Blue', 'EVI'], axis=1)  # Independent variables (features)
+y = df_sampled['Veg']                        # Dependent variable (target)
 
 # Split data into training and test sets (90% train, 10% test)
 X_train, X_test, y_train, y_test = train_test_split(
